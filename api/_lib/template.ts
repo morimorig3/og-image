@@ -16,18 +16,15 @@ const mono = readFileSync(`${__dirname}/../_fonts/Vera-Mono.woff2`).toString(
   "base64"
 );
 
-function getCss(theme: string, fontSize: string) {
-  let background = "white";
-  let foreground = "black";
-  let radial = "lightgray";
+const background = readFileSync(
+  `${__dirname}/../_images/background.png`
+).toString("base64");
 
-  if (theme === "dark") {
-    background = "black";
-    foreground = "white";
-    radial = "dimgray";
-  }
+function getCss(fontSize: string) {
+  let foreground = "#333333";
+
   return `
-    @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@500&display=swap');
+    @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@700&display=swap');
     
     @font-face {
         font-family: 'Inter';
@@ -51,9 +48,8 @@ function getCss(theme: string, fontSize: string) {
       }
 
     body {
-        background: ${background};
-        background-image: radial-gradient(circle at 25px 25px, ${radial} 2%, transparent 0%), radial-gradient(circle at 75px 75px, ${radial} 2%, transparent 0%);
-        background-size: 100px 100px;
+        background: url('data:image/png;base64,${background}') no-repeat;
+        background-size: contain;
         height: 100vh;
         display: flex;
         text-align: center;
@@ -104,34 +100,31 @@ function getCss(theme: string, fontSize: string) {
     .heading {
         font-family: 'Noto Sans JP', sans-serif;
         font-size: ${sanitizeHtml(fontSize)};
-        font-style: normal;
+        font-weight: 700;
         color: ${foreground};
-        line-height: 1.8;
-    }`;
+        line-height: 1.3;
+        max-width: 900px
+    }
+    
+    .grid {
+        display: grid;
+        place-items: center;
+    }
+    `;
 }
 
 export function getHtml(parsedReq: ParsedRequest) {
-  const { text, theme, md, fontSize, images, widths, heights } = parsedReq;
+  const { text, md, fontSize } = parsedReq;
   return `<!DOCTYPE html>
 <html>
     <meta charset="utf-8">
     <title>Generated Image</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <style>
-        ${getCss(theme, fontSize)}
+        ${getCss(fontSize)}
     </style>
     <body>
-        <div>
-            <div class="spacer">
-            <div class="logo-wrapper">
-                ${images
-                  .map(
-                    (img, i) =>
-                      getPlusSign(i) + getImage(img, widths[i], heights[i])
-                  )
-                  .join("")}
-            </div>
-            <div class="spacer">
+        <div class="grid">
             <div class="heading">${emojify(
               md ? marked(text) : sanitizeHtml(text)
             )}
@@ -139,18 +132,4 @@ export function getHtml(parsedReq: ParsedRequest) {
         </div>
     </body>
 </html>`;
-}
-
-function getImage(src: string, width = "auto", height = "225") {
-  return `<img
-        class="logo"
-        alt="Generated Image"
-        src="${sanitizeHtml(src)}"
-        width="${sanitizeHtml(width)}"
-        height="${sanitizeHtml(height)}"
-    />`;
-}
-
-function getPlusSign(i: number) {
-  return i === 0 ? "" : '<div class="plus">+</div>';
 }
