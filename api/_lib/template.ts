@@ -16,9 +16,9 @@ const mono = readFileSync(`${__dirname}/../_fonts/Vera-Mono.woff2`).toString(
   "base64"
 );
 
-const background = readFileSync(
-  `${__dirname}/../_images/background.png`
-).toString("base64");
+const icon = readFileSync(`${__dirname}/../_images/icon.png`).toString(
+  "base64"
+);
 
 function getCss(fontSize: string) {
   let foreground = "#333333";
@@ -48,8 +48,8 @@ function getCss(fontSize: string) {
       }
 
     body {
-        background: url('data:image/png;base64,${background}') no-repeat;
         background-size: contain;
+        background-image: linear-gradient(to bottom right, #22d3ee, #2563eb);
         height: 100vh;
         display: flex;
         text-align: center;
@@ -103,12 +103,26 @@ function getCss(fontSize: string) {
         font-weight: 700;
         color: ${foreground};
         line-height: 1.3;
-        max-width: 900px
+        max-width: 1000px
     }
     
     .grid {
+        background-color: #f8fafc;
         display: grid;
         place-items: center;
+        width: 1100px;
+        height: 530px;
+        border-radius: 30px;
+        position: relative;
+    }
+    
+    .icon {
+        position: absolute;
+        right: 30px;
+        bottom: 30px;
+        display: block;
+        width: 80px;
+        height: 80px;
     }
     `;
 }
@@ -128,6 +142,7 @@ export function getHtml(parsedReq: ParsedRequest) {
             <div class="heading">${emojify(
               md ? marked(text) : sanitizeHtml(text)
             )}
+            <img class='icon' src=data:image/png;base64,${icon} alt='icon' />
             </div>
         </div>
     </body>
