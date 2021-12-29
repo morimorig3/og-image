@@ -27,7 +27,6 @@ function getCss(fontSize: string) {
   let foreground = "#333333";
 
   return `
-    
     @font-face {
         font-family: 'Noto';
         font-style:  normal;
