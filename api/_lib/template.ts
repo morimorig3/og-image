@@ -15,6 +15,9 @@ const bold = readFileSync(`${__dirname}/../_fonts/Inter-Bold.woff2`).toString(
 const mono = readFileSync(`${__dirname}/../_fonts/Vera-Mono.woff2`).toString(
   "base64"
 );
+const noto = readFileSync(
+  `${__dirname}/../_fonts/NotoSansJP-Bold.woff2`
+).toString("base64");
 
 const icon = readFileSync(`${__dirname}/../_images/icon.png`).toString(
   "base64"
@@ -24,8 +27,14 @@ function getCss(fontSize: string) {
   let foreground = "#333333";
 
   return `
-    @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@700&display=swap');
     
+    @font-face {
+        font-family: 'Noto Sans Japanese';
+        font-style:  normal;
+        font-weight: bold;
+        src: url(data:font/woff2;charset=utf-8;base64,${noto}) format('woff2');
+    }
+
     @font-face {
         font-family: 'Inter';
         font-style:  normal;
@@ -98,7 +107,7 @@ function getCss(fontSize: string) {
     }
     
     .heading {
-        font-family: 'Noto Sans JP', sans-serif;
+        font-family: 'Noto Sans Japanese', sans-serif;
         font-size: ${sanitizeHtml(fontSize)};
         font-weight: 700;
         color: ${foreground};
