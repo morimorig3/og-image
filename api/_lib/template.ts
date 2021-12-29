@@ -29,9 +29,9 @@ function getCss(fontSize: string) {
   return `
     
     @font-face {
-        font-family: 'Noto Sans Japanese';
+        font-family: 'Noto';
         font-style:  normal;
-        font-weight: bold;
+        font-weight: normal;
         src: url(data:font/woff2;charset=utf-8;base64,${noto}) format('woff2');
     }
 
@@ -107,7 +107,7 @@ function getCss(fontSize: string) {
     }
     
     .heading {
-        font-family: 'Noto Sans Japanese', sans-serif;
+        font-family: 'Noto', sans-serif;
         font-size: ${sanitizeHtml(fontSize)};
         font-weight: 700;
         color: ${foreground};
