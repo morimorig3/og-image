@@ -2,6 +2,7 @@ import { readFileSync } from "fs";
 import marked from "marked";
 import { sanitizeHtml } from "./sanitizer";
 import { ParsedRequest } from "./types";
+import { loadDefaultJapaneseParser } from "budoux";
 const twemoji = require("twemoji");
 const twOptions = { folder: "svg", ext: ".svg" };
 const emojify = (text: string) => twemoji.parse(text, twOptions);
@@ -137,6 +138,8 @@ function getCss(fontSize: string) {
 
 export function getHtml(parsedReq: ParsedRequest) {
   const { text, md, fontSize } = parsedReq;
+  const parser = loadDefaultJapaneseParser();
+  const title = parser.translateHTMLString(text);
   return `<!DOCTYPE html>
 <html>
     <meta charset="utf-8">
@@ -148,7 +151,7 @@ export function getHtml(parsedReq: ParsedRequest) {
     <body>
         <div class="grid">
             <div class="heading">${emojify(
-              md ? marked(text) : sanitizeHtml(text)
+              md ? marked(title) : sanitizeHtml(title)
             )}
             <img class='icon' src=data:image/png;base64,${icon} alt='icon' />
             </div>
